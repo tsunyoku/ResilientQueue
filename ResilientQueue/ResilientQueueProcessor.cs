@@ -83,6 +83,7 @@ public abstract class ResilientQueueProcessor<T>(
 
             item.Failed = false;
             item.RetryCount++;
+            item.Exception = null;
 
             await PushItemToQueueAsync(item);
         }
