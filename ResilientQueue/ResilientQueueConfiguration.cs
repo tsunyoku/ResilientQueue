@@ -15,4 +15,7 @@ public class ResilientQueueConfiguration
     
     [Required]
     public required int MaxBatchSize { get; init; }
+    
+    [Required]
+    public required bool ProcessBatchInOrder { get; init; }
 }

@@ -43,8 +43,18 @@ public abstract class ResilientQueueProcessor<T>(
     }
 
     protected abstract Task ProcessItemAsync(T item);
+
+    private Task ProcessItemsAsync(IEnumerable<T> items) => queueConfiguration.ProcessBatchInOrder
+        ? ProcessItemsInOrderAsync(items)
+        : ProcessItemsConcurrentlyAsync(items);
+
+    private async Task ProcessItemsInOrderAsync(IEnumerable<T> items)
+    {
+        foreach (var item in items)
+            await ProcessItemInternalAsync(item);
+    }
     
-    private async Task ProcessItemsAsync(IEnumerable<T> items)
+    private async Task ProcessItemsConcurrentlyAsync(IEnumerable<T> items)
     {
         // TODO: replace with Task.WhenEach in .NET 9
 
